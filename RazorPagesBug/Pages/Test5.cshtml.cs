@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorPagesBug.Pages
 {
-    public class PrivacyModel : PageModel
+    public class Test5Model : PageModel
     {
+        [FromQuery(Name = "id")]   public string Id { get; set; } = "default";
+        [FromQuery(Name = "page")] public new string Page { get; set; } = "default";
+
         public void OnGet()
         {
         }
