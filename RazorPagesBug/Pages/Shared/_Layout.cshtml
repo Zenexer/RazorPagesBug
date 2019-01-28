@@ -4,22 +4,62 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RazorPagesBug</title>
+    <style>
+        .working {
+            color: green;
+        }
+        .broken {
+            color: red;
+        }
+        table {
+            border-collapse: collapse
+        }
+        th, td {
+            padding: 0 1em;
+            border-color: #aaa;
+            border-width: 1px 0;
+            border-style: solid none;
+        }
+        th {
+            border-width: 1px;
+            border-style: solid;
+        }
+        td:nth-child(3), td:last-child {
+            border-right-width: 1px;
+            border-right-style: solid;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
             <h1>Tests</h1>
-            <ol>
-                <li><a asp-page="/Test1" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test1?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test2" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test2?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test3" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test3?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test4" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test4?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test5" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test5?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test6" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test6?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test7" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test7?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test8" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test8?id=valid-id&page=valid-page">Traditional link</a></li>
-                <li><a asp-page="/Test9" asp-route-id="valid-id" asp-route-page="valid-page">ASP.NET Core-style link</a> | <a href="/Test9?id=valid-id&page=valid-page">Traditional link</a></li>
-            </ol>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th colspan="2">ASP.NET Core Link</th>
+                    <th colspan="2">Traditional Link</th>
+                </tr>
+                @for (var i = 1; i <= 9; i++)
+                {
+                    <tr>
+                        <th>Test @i</th>
+                        <td><a asp-page="/Test@(i)" asp-route-id="valid-id" asp-route-page="valid-page">Link</a></td>
+                        <td><span class="broken">broken</span></td>
+                        <td><a href="/Test@(i)?id=valid-id&page=valid-page">Link</a></td>
+                        <td>
+                            @if (i == 4 || i == 5 || i == 7)
+                            {
+                                <span class="working">working</span>
+                            }
+                            else
+                            {
+                                <span class="broken">broken</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
         </nav>
         <p>The expected value for "Id" is always "valid-id".  The expected value for "Page" is always "valid-page".</p>
         <p>A value of "default" indicates that the querystring parameter was either not passed or was not bound properly.</p>
